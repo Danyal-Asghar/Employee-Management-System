@@ -1,9 +1,8 @@
-import { Navigate, Route } from 'react-router-dom'
-import {Toaster } from 'react-hot-toast'
-import { Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
+import { Toaster } from 'react-hot-toast'
 import Layout from './Pages/Layout'
 import LoginLanding from './Pages/LoginLanding'
-import Attendence from './Pages/Attendence'
+import Attendance from './Pages/Attendence' 
 import Leave from './Pages/Leave'
 import PaySlips from './Pages/PaySlips'
 import Setting from './Pages/Setting'
@@ -13,24 +12,43 @@ import PrintPaySlips from './Pages/PrintPaySlips'
 import LoginForm from './Component/LoginForm'
 
 const App = () => {
+  // Now, changing this single variable will update BOTH your Routes and your Sidebar!
+  const userRole = "EMPLOYEE"; 
+
   return (
     <>
-    <Toaster />
-    <Routes>
-      <Route path='/login' element={<LoginLanding />} />
-      <Route path='/login/admin' element={<LoginForm  role="admin" title="Admin Portal " subtitle="Sign in to manage organization"/>} />
-      <Route path='/login/employee' element={<LoginForm role="employee" title="Employee Portal " subtitle="Sign in to access your account " />} />
-      <Route element={<Layout />}>
-        <Route path='/dashboard' element={<Dashboard />} />
-        <Route path='employee' element={<Employee />} />
-         <Route path='attendence' element={<Attendence />} />
-          <Route path='leave' element={<Leave />} />
-           <Route path='paySlips' element={<PaySlips />} />
-            <Route path='setting' element={<Setting />} />
-      </Route>
-      <Route path='print/payslips/:id' element={<PrintPaySlips />}  />
-    
-    </Routes>
+      <Toaster position="top-right" />
+      <Routes>
+        <Route path='/' element={<Navigate to="/login" replace />} />
+        <Route path='/login' element={<LoginLanding />} />
+        <Route path='/login/admin' element={<LoginForm role="admin" title="Admin Portal" />} />
+        <Route path='/login/employee' element={<LoginForm role="employee" title="Employee Portal" />} />
+        
+        {/* We pass userRole here so Layout (and Sidebar) can use it */}
+        <Route element={<Layout userRole={userRole} />}>
+          <Route path='/dashboard' element={<Dashboard />} />
+          
+          {/* EXCLUSIVE ROUTES LOGIC */}
+          {userRole === "ADMIN" ? (
+            <>
+                <Route path='/employees' element={<Employee />} />
+                <Route path='/attendance' element={<Navigate to="/dashboard" replace />} />
+            </>
+          ) : (
+            <>
+                <Route path='/attendance' element={<Attendance />} />
+                <Route path='/employees' element={<Navigate to="/dashboard" replace />} />
+            </>
+          )}
+
+          <Route path='/leave' element={<Leave />} />
+          <Route path='/payslips' element={<PaySlips />} />
+          <Route path='/settings' element={<Setting />} />
+        </Route>
+
+        <Route path='/print/payslips/:id' element={<PrintPaySlips />} />
+        <Route path='*' element={<Navigate to="/dashboard" replace />} />
+      </Routes>
     </>
   )
 }
