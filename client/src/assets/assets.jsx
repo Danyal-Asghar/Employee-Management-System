@@ -325,3 +325,47 @@ export function getDayTypeDisplay(record) {
     }
     return { label: "—", className: "" };
 }
+export const performanceOverviewData = [
+  {
+    day: "Mon",
+    attendance: 78,
+    employeesPresent: 2,
+    leaves: 1,
+  },
+  {
+    day: "Tue",
+    attendance: 85,
+    employeesPresent: 3,
+    leaves: 0,
+  },
+  {
+    day: "Wed",
+    attendance: 82,
+    employeesPresent: 2,
+    leaves: 1,
+  },
+  {
+    day: "Thu",
+    attendance: 90,
+    employeesPresent: 3,
+    leaves: 0,
+  },
+  {
+    day: "Fri",
+    attendance: 88,
+    employeesPresent: 3,
+    leaves: 0,
+  },
+  {
+    day: "Sat",
+    attendance: 72,
+    employeesPresent: 2,
+    leaves: 1,
+  },
+  {
+    day: "Sun",
+    attendance: 80,
+    employeesPresent: 2,
+    leaves: 1,
+  },
+];

@@ -2,7 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import Layout from './Pages/Layout'
 import LoginLanding from './Pages/LoginLanding'
-import Attendance from './Pages/Attendence' 
+import Attendance from './Pages/Attendance' 
 import Leave from './Pages/Leave'
 import PaySlips from './Pages/PaySlips'
 import Setting from './Pages/Setting'
@@ -54,3 +54,4 @@ const App = () => {
 }
 
 export default App
+
