@@ -7,13 +7,13 @@ import Leave from './Pages/Leave'
 import PaySlips from './Pages/PaySlips'
 import Setting from './Pages/Setting'
 import Dashboard from './Pages/Dashboard'
-import Employee from './Pages/Employee'
+import Employee from './Pages/Employees'
 import PrintPaySlips from './Pages/PrintPaySlips'
 import LoginForm from './Component/LoginForm'
 
 const App = () => {
   // Now, changing this single variable will update BOTH your Routes and your Sidebar!
-  const userRole = "EMPLOYEE"; 
+  const userRole = "ADMIN"; 
 
   return (
     <>

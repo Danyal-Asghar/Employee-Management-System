@@ -87,3 +87,4 @@ export const EmployeeDashboard = ({ data }) => {
     </div>
   );
 };
+export default EmployeeDashboard
