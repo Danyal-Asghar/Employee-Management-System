@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Plus, Thermometer, CloudRain, Flower2, User } from 'lucide-react';
 import { dummyLeaveData } from '../assets/assets';
-import ApplyLeaveModal from '../Component/ApplyLeaveModal';
+
+// Fixed import path based on your VS Code screenshot!
+import ApplyLeaveModal from './ApplyLeaveModal';
 
 const LeaveSummaryCard = ({ icon: Icon, title, count, colorClass }) => (
   <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
@@ -16,8 +18,9 @@ const LeaveSummaryCard = ({ icon: Icon, title, count, colorClass }) => (
 );
 
 const LeaveEmployee = ({ userRole }) => {
-  const [leaves, setLeaves] = useState(dummyLeaveData);
-  const[isModalOpen, setIsModalOpen] = useState(false);
+  // Added state back in to control the data and the modal
+  const[leaves, setLeaves] = useState(dummyLeaveData || []);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const countLeaves = (type) =>
     leaves.filter((l) => l.type === type && l.status === "APPROVED").length;
@@ -25,9 +28,6 @@ const LeaveEmployee = ({ userRole }) => {
   const handleAddLeave = (newLeave) => {
     setLeaves([newLeave, ...leaves]);
   };
-
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
 
   return (
     <div className="min-h-[91vh] p-6 sm:p-10 ">
@@ -44,9 +44,10 @@ const LeaveEmployee = ({ userRole }) => {
             </div>
           </div>
 
+          {/* CHANGED THIS FROM <Link> TO A REAL BUTTON */}
           <button 
             type="button"
-            onClick={openModal}
+            onClick={() => setIsModalOpen(true)}
             className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg cursor-pointer"
           >
             <Plus className="w-5 h-5" />
@@ -72,7 +73,7 @@ const LeaveEmployee = ({ userRole }) => {
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {leaves.map((leave) => (
-                  <tr key={leave._id} className="hover:bg-slate-50/50 transition-colors">
+                  <tr key={leave._id || Math.random()} className="hover:bg-slate-50/50 transition-colors">
                     <td className="px-8 py-5">
                       <span className="px-3 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 uppercase">{leave.type}</span>
                     </td>
@@ -96,9 +97,10 @@ const LeaveEmployee = ({ userRole }) => {
         </div>
       </div>
 
+      {/* RENDER THE MODAL AT THE BOTTOM */}
       <ApplyLeaveModal 
         isOpen={isModalOpen} 
-        onClose={closeModal} 
+        onClose={() => setIsModalOpen(false)} 
         onSubmit={handleAddLeave} 
       />
     </div>

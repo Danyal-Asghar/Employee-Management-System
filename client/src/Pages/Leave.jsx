@@ -1,94 +1,65 @@
-import React from 'react';
-import { CheckIcon, XIcon } from 'lucide-react';
-import { dummyLeaveData } from '../assets/assets';
+// import React from 'react'
+// import LeaveAdmin from '../Component/LeaveAdmin'
+// import LeaveEmployee from '../Component/LeaveEmployee'
 
-const Leave = () => {
-  const statusStyles = {
-    APPROVED: "bg-green-100 text-green-800",
-    REJECTED: "bg-red-100 text-red-800",
-    PENDING: "bg-orange-100 text-orange-800",
-  };
+// const Leave = () => {
+//   const userRole = "ADMIN" // later replace with auth context
 
-  const typeStyles = {
-    ANNUAL: "bg-slate-100 text-slate-700",
-    CASUAL: "bg-slate-100 text-slate-700",
-    SICK: "bg-slate-100 text-slate-700",
-  };
+//   return userRole === "ADMIN" ? <LeaveAdmin /> : <LeaveEmployee />
+// }
 
+// export default Leave
+// import React, { useState } from 'react'
+// import LeaveAdmin from '../Component/LeaveAdmin'
+// import LeaveEmployee from '../Component/LeaveEmployee'
+
+// const Leave = () => {
+//   // 1. Use useState instead of const. 
+//   // This tells React: "Watch this variable. If it changes, refresh the screen."
+//   const [userRole, setUserRole] = useState("ADMIN") 
+
+//   return (
+//     <div className="min-h-screen bg-slate-50">
+//       {/* 2. TEST BUTTONS: These allow you to actually see the change happening */}
+//       <div className="bg-white border-b p-4 flex justify-center gap-4 shadow-sm">
+//         <p className="text-sm font-bold self-center mr-4">Test Role Switcher:</p>
+//         <button 
+//           onClick={() => setUserRole("ADMIN")}
+//           className={`px-4 py-2 rounded-lg text-sm font-bold transition ${userRole === 'ADMIN' ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-600'}`}
+//         >
+//           Set as Admin
+//         </button>
+//         <button 
+//           onClick={() => setUserRole("EMPLOYEE")}
+//           className={`px-4 py-2 rounded-lg text-sm font-bold transition ${userRole === 'EMPLOYEE' ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-600'}`}
+//         >
+//           Set as Employee
+//         </button>
+//       </div>
+
+//       {/* 3. THE ACTUAL LOGIC */}
+//       {userRole === "ADMIN" ? <LeaveAdmin /> : <LeaveEmployee />}
+//     </div>
+//   )
+// }
+
+// export default Leave
+import React from 'react'
+import LeaveAdmin from '../Component/LeaveAdmin'
+import LeaveEmployee from '../Component/LeaveEmployee'
+
+// Receive userRole from App.jsx
+const Leave = ({ userRole }) => {
   return (
-    <div className="min-h-[91vh] p-6 sm:p-10">
-      <div className="max-w-7xl mx-auto bg-white rounded-2xl shadow-md overflow-hidden">
-        {/* Header */}
-        <div className="px-6 sm:px-8 py-6 bg-slate-50 border-b">
-          <h1 className="text-2xl font-bold text-slate-900">Leave Management</h1>
-          <p className="text-sm text-slate-500 mt-1">Manage leave applications</p>
-        </div>
+    <>
+      {/* Pass the role down to the specific component */}
+      {userRole === "ADMIN" ? (
+        <LeaveAdmin userRole={userRole} />
+      ) : (
+        <LeaveEmployee userRole={userRole} />
+      )}
+    </>
+  )
+}
 
-        {/* Table */}
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-slate-200">
-            <thead className="bg-white">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Employee</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Type</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Dates</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Reason</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-slate-200">
-              {dummyLeaveData.map((leave) => (
-                <tr key={leave._id} className="hover:bg-slate-50 transition-colors duration-200">
-                  <td className="px-6 py-4 whitespace-nowrap text-slate-900 font-medium">
-                    {Array.isArray(leave.employee) 
-                      ? leave.employee[0].firstName + ' ' + leave.employee[0].lastName
-                      : leave.employee.firstName + ' ' + leave.employee.lastName}
-                  </td>
-
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${typeStyles[leave.type]}`}>
-                      {leave.type}
-                    </span>
-                  </td>
-
-                  <td className="px-6 py-4 whitespace-nowrap text-slate-700 text-sm">
-                    {new Date(leave.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} — {new Date(leave.endDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                  </td>
-
-                  <td className="px-6 py-4 whitespace-nowrap text-slate-700 text-sm">{leave.reason}</td>
-
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 rounded-full text-xs font-semibold ${statusStyles[leave.status]}`}>
-                      {leave.status}
-                    </span>
-                  </td>
-
-                  <td className="px-6 py-4 whitespace-nowrap flex items-center gap-2">
-                    {leave.status === "PENDING" && (
-                      <>
-                        <button className="p-2 bg-green-100 text-green-600 rounded-md hover:bg-green-200 transition">
-                          <CheckIcon className="w-4 h-4" />
-                        </button>
-                        <button className="p-2 bg-red-100 text-red-600 rounded-md hover:bg-red-200 transition">
-                          <XIcon className="w-4 h-4" />
-                        </button>
-                      </>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Footer */}
-        <div className="px-6 sm:px-8 py-4 bg-blue-50 border-t text-sm text-slate-600">
-          Total Leaves: {dummyLeaveData.length}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default Leave;
+export default Leave
