@@ -1,3 +1,5 @@
+
+
 import React from 'react';
 import { Briefcase, Mail, Pencil, Trash2 } from 'lucide-react';
 
@@ -5,11 +7,11 @@ const EmployeeCard = ({ emp, onEdit, onDelete }) => {
   return (
     <div className="group relative p-6 rounded-3xl border border-slate-200 bg-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
       {/* Hover Actions */}
-      <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition">
+      <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition z-10">
         <button
           onClick={(e) => {
-            e.stopPropagation(); // Prevents any accidental click bubbling
-            onEdit();
+            e.stopPropagation();
+            onEdit(emp); // FIXED: Passing the whole employee object to the parent
           }}
           className="p-2 rounded-full border bg-white shadow-sm hover:bg-slate-50 text-slate-600"
           title="Edit Employee"
@@ -20,7 +22,7 @@ const EmployeeCard = ({ emp, onEdit, onDelete }) => {
         <button
           onClick={(e) => {
             e.stopPropagation();
-            onDelete();
+            onDelete(emp._id); // FIXED: Passing the ID to delete
           }}
           className="p-2 rounded-full border bg-white shadow-sm hover:bg-slate-50 text-red-500"
           title="Delete Employee"
