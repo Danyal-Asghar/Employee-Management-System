@@ -1,5 +1,4 @@
-
-import React from 'react' // Removed useState
+import React from 'react' 
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import Layout from './Pages/Layout'
@@ -14,12 +13,7 @@ import PrintPaySlips from './Pages/PrintPaySlips'
 import LoginForm from './Component/LoginForm'
 
 const App = () => {
-  // ============================================================
-  // CHANGE THIS LINE MANUALLY TO SWITCH THE WHOLE APP
-  // Use "ADMIN" or "EMPLOYEE"
-  // ============================================================
-  const userRole = "EMPLOYEE"; 
-  // ============================================================
+  const userRole = "ADMIN"; // Change to "EMPLOYEE" to test
 
   return (
     <>
@@ -30,14 +24,13 @@ const App = () => {
         <Route path='/login/admin' element={<LoginForm role="admin" title="Admin Portal" />} />
         <Route path='/login/employee' element={<LoginForm role="employee" title="Employee Portal" />} />
 
-        {/* 1. Pass the role to Layout so the Sidebar/Menu changes */}
+        {/* Pass userRole to Layout context */}
         <Route element={<Layout userRole={userRole} />}>
-          <Route path='/dashboard' element={<Dashboard />} />
+          <Route path='/dashboard' element={<Dashboard userRole={userRole} />} />
 
-          {/* 2. Role-based routing for Employees vs Attendance */}
           {userRole === "ADMIN" ? (
             <>
-              <Route path='/employees' element={<Employee />} />
+              <Route path='/employees' element={<Employee userRole={userRole} />} />
               <Route path='/attendance' element={<Navigate to="/dashboard" replace />} />
             </>
           ) : (
@@ -47,10 +40,10 @@ const App = () => {
             </>
           )}
 
-          {/* 3. Pass the role to Leave so it shows Admin or Employee view */}
           <Route path='/leave' element={<Leave userRole={userRole} />} />
           
-          <Route path='/payslips' element={<PaySlips />} />
+          {/* Role passed here for internal logic */}
+          <Route path='/payslips' element={<PaySlips userRole={userRole} />} />
           <Route path='/settings' element={<Setting />} />
         </Route>
 

@@ -27,7 +27,7 @@ const LeaveAdmin = () => {
   };
 
   return (
-    <div className="min-h-[91vh] p-6 sm:p-10 bg-slate-50">
+    <div className="min-h-[91vh] p-6 sm:p-10 ">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-slate-900">Leave Management</h1>
