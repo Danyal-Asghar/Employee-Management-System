@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import {
   Calendar,
@@ -9,8 +10,35 @@ import {
 import { dummyAttendanceData } from '../assets/assets';
 
 const Attendance = () => {
-  const [attendanceRecords, setAttendanceRecords] =
-    useState(dummyAttendanceData);
+
+  // 🔥 ADDING 2 EXTRA DUMMY RECORDS SAFELY
+  const extraDummyData = [
+    {
+      _id: "extra_1",
+      employeeId: "69b411e6f8a807df391d7b13",
+      date: "2026-04-18T00:00:00.000Z",
+      checkIn: "2026-04-18T09:15:00.000Z",
+      checkOut: "2026-04-18T17:30:00.000Z",
+      status: "PRESENT",
+      workingHours: 8.2,
+      dayType: "Full Day",
+    },
+    {
+      _id: "extra_2",
+      employeeId: "69b411e6f8a807df391d7b13",
+      date: "2026-04-19T00:00:00.000Z",
+      checkIn: "2026-04-19T09:45:00.000Z",
+      checkOut: "2026-04-19T16:45:00.000Z",
+      status: "PRESENT",
+      workingHours: 7,
+      dayType: "Three Quarter Day",
+    },
+  ];
+
+  const [attendanceRecords, setAttendanceRecords] = useState([
+    ...extraDummyData,
+    ...dummyAttendanceData,
+  ]);
 
   const [isClockedIn, setIsClockedIn] = useState(false);
   const [checkInTime, setCheckInTime] = useState(null);
@@ -58,7 +86,10 @@ const Attendance = () => {
       totalDays > 0 ? (totalHours / totalDays).toFixed(1) : 0;
 
     const lateArrivals = attendanceRecords.filter((record) => {
+      if (!record.checkIn) return false;
+
       const checkInDate = new Date(record.checkIn);
+
       return (
         checkInDate.getHours() > 9 ||
         (checkInDate.getHours() === 9 &&
@@ -87,7 +118,7 @@ const Attendance = () => {
     });
 
   return (
-    <div className="  pb-24">
+    <div className="pb-24">
 
       {/* Header */}
       <div className="max-w-7xl mx-auto px-6 pt-10 pb-6">
@@ -180,9 +211,7 @@ const Attendance = () => {
         <button
           onClick={handleClockToggle}
           className={`px-6 py-3 rounded-xl text-white font-bold ${
-            isClockedIn
-              ? "bg-red-500"
-              : "bg-indigo-600"
+            isClockedIn ? "bg-red-500" : "bg-indigo-600"
           }`}
         >
           {isClockedIn ? (

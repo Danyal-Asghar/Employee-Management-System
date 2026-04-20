@@ -1,3 +1,4 @@
+
 import React from 'react' 
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
@@ -6,14 +7,14 @@ import LoginLanding from './Pages/LoginLanding'
 import Attendance from './Pages/Attendance' 
 import Leave from './Pages/Leave'
 import PaySlips from './Pages/PaySlips'
-import Setting from './Pages/Setting'
 import Dashboard from './Pages/Dashboard'
 import Employee from './Pages/Employees'
 import PrintPaySlips from './Pages/PrintPaySlips'
 import LoginForm from './Component/LoginForm'
+import Settings from './Pages/Settings'
 
 const App = () => {
-  const userRole = "ADMIN"; // Change to "EMPLOYEE" to test
+  const userRole = "ADMIN"; // Change to "ADMIN" to test
 
   return (
     <>
@@ -24,7 +25,7 @@ const App = () => {
         <Route path='/login/admin' element={<LoginForm role="admin" title="Admin Portal" />} />
         <Route path='/login/employee' element={<LoginForm role="employee" title="Employee Portal" />} />
 
-        {/* Pass userRole to Layout context */}
+        {/* MAIN APP (WITH SIDEBAR) */}
         <Route element={<Layout userRole={userRole} />}>
           <Route path='/dashboard' element={<Dashboard userRole={userRole} />} />
 
@@ -41,13 +42,13 @@ const App = () => {
           )}
 
           <Route path='/leave' element={<Leave userRole={userRole} />} />
-          
-          {/* Role passed here for internal logic */}
           <Route path='/payslips' element={<PaySlips userRole={userRole} />} />
-          <Route path='/settings' element={<Setting />} />
+          <Route path='/settings' element={<Settings userRole={userRole} />} />
         </Route>
 
+        {/* STANDALONE PAGE (NO SIDEBAR) */}
         <Route path='/print/payslips/:id' element={<PrintPaySlips />} />
+        
         <Route path='*' element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </>

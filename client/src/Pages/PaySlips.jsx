@@ -1,65 +1,93 @@
 
 import React from "react";
-import { useOutletContext } from 'react-router-dom';
-import { Download } from 'lucide-react';
-import { dummyPayslipData, dummyEmployeeData } from '../assets/assets';
-import AdminPayslip from '../Component/AdminPayslip';
-import EmployeePayslip from '../Component/EmployeePayslip';
+import { useNavigate, useOutletContext } from "react-router-dom";
+import { Download } from "lucide-react";
+import { dummyPayslipData, dummyEmployeeData } from "../assets/assets";
+import AdminPayslip from "../Component/AdminPayslip";
 
-const formatCurrency = (num) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(num);
-const formatPeriod = (month, year) => new Date(year, month - 1).toLocaleString('default', { month: 'long', year: 'numeric' });
+const formatCurrency = (num) =>
+  new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 0,
+  }).format(num);
+
+const formatPeriod = (month, year) =>
+  new Date(year, month - 1).toLocaleString("default", {
+    month: "long",
+    year: "numeric",
+  });
 
 const PaySlips = () => {
-    // This grabs the userRole from the <Layout /> component via the Outlet context
-    const { userRole } = useOutletContext(); 
+  const navigate = useNavigate();
+  const { userRole } = useOutletContext();
 
-    const currentUserId = dummyEmployeeData[0]._id; 
-    const myPayslips = dummyPayslipData.filter(p => p.employeeId === currentUserId);
+  // 🔥 FIX: correct logged-in employee (use John for now)
+  const currentUserId = "69b411e6f8a807df391d7b13";
 
-    return (
-        <div className="p-8 font-sans">
-            <div className="mb-8">
-  {userRole !== "ADMIN" && (
+  const myPayslips = dummyPayslipData.filter(
+    (p) => p.employeeId === currentUserId
+  );
+
+  return (
+   <div className="p-8 font-sans">
+  {userRole === "ADMIN" ? (
+    <AdminPayslip />
+  ) : (
     <>
-      <h1 className="text-2xl font-bold text-gray-900">Payslips</h1>
-      <p>Your monthly salary statements</p>
+      <h1 className="text-2xl font-bold mb-6">Payslips</h1>
+
+      <div className="bg-white border rounded-xl overflow-hidden">
+        <table className="w-full">
+          <thead>
+            <tr className="bg-gray-50">
+              <th className="p-4 text-left">Period</th>
+              <th className="p-4 text-left">Basic</th>
+              <th className="p-4 text-left">Net</th>
+              <th className="p-4 text-right">Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {myPayslips.length === 0 ? (
+              <tr>
+                <td colSpan="4" className="p-6 text-center text-gray-500">
+                  No payslips found
+                </td>
+              </tr>
+            ) : (
+              myPayslips.map((p) => (
+                <tr key={p._id} className="border-t">
+                  <td className="p-4">
+                    {formatPeriod(p.month, p.year)}
+                  </td>
+                  <td className="p-4">
+                    {formatCurrency(p.basicSalary)}
+                  </td>
+                  <td className="p-4 font-semibold">
+                    {formatCurrency(p.netSalary)}
+                  </td>
+                  <td className="p-4 text-right">
+                    <button
+                      onClick={() =>
+                        navigate(`/print/payslips/${p._id}`)
+                      }
+                      className="inline-flex items-center gap-2 px-3 py-1 border rounded hover:bg-blue-50 text-blue-600"
+                    >
+                      <Download size={14} />
+                      Download
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </>
   )}
 </div>
-
-            {/* Conditional Rendering based on Role */}
-            {userRole === "ADMIN" ? (
-                <AdminPayslip userRole={userRole} />
-            ) : (
-                <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
-                    <table className="w-full text-left border-collapse">
-                        <thead>
-                            <tr className="bg-gray-50 border-b border-gray-200">
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Period</th>
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Basic Salary</th>
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Net Salary</th>
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-right">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-100">
-                            {myPayslips.map((payslip) => (
-                                <tr key={payslip._id} className="hover:bg-gray-50 transition-colors">
-                                    <td className="px-6 py-4 text-sm text-gray-500">{formatPeriod(payslip.month, payslip.year)}</td>
-                                    <td className="px-6 py-4 text-sm text-gray-500">{formatCurrency(payslip.basicSalary)}</td>
-                                    <td className="px-6 py-4 text-sm font-semibold text-gray-800">{formatCurrency(payslip.netSalary)}</td>
-                                    <td className="px-6 py-4 text-right">
-                                        <button className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-blue-600 border border-blue-200 rounded-md hover:bg-blue-50 transition-colors">
-                                            <Download size={14} /> Download
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            )}
-        </div>
-    );
+  );
 };
 
 export default PaySlips;

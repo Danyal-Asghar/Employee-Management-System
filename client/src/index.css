@@ -4,7 +4,45 @@
 * {
     font-family: "Outfit", "Inter";
 }
+@layer utilities {
+    /* --- ADD THIS NEW UTILITY HERE --- */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
 
+    /* ... your existing card, btn, input, table, etc. styles ... */
+    
+    /* Card styles */
+    .card {
+        @apply bg-white rounded-lg border border-slate-200/70;
+    }
+    /* ... rest of your utilities ... */
+}
+
+/* ... your existing @keyframes ... */
+
+/* 
+   KEEP THIS SECTION if you want scrollbars to appear in 
+   other small areas (like dropdowns), 
+   otherwise you can delete this whole block to remove it everywhere.
+*/
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    @apply bg-transparent;
+}
+::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 rounded-full;
+}
+::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-400;
+}
 @layer utilities {
     /* Card styles */
     .card {
